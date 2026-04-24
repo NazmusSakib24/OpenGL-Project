@@ -1,13 +1,35 @@
 #include <windows.h>
 #include <GL/glut.h>
+#include <math.h>
 
 
 float shipMove = 0.0f;
 bool shipOn = false;
 //bool carOn = false;
 //bool rainOn = false;
-//bool cloudOn = false;
+float cloudMove1 = 0.0f;
+float cloudMove2 = 0.0f;
+bool cloudOn1 = false;
+bool cloudOn2 = false;
+bool showCloud = true;
 bool allOn = false;
+
+
+void _circle(float r, float g, float b, float radius, float xc, float yc)
+{
+    glBegin(GL_POLYGON);
+    for(int i = 0; i < 100; i++)
+    {
+        glColor3ub(r,g,b);
+        float pi = 3.1416;
+        float A = (i*pi*2)/100;
+        float x = radius*cos(A);
+        float y = radius*sin(A);
+        glVertex2f(x+xc, y+yc);
+    }
+    glEnd();
+}
+
 
 // ID1 (River)
 void river() {
@@ -1250,7 +1272,7 @@ void ship(){
 //ID11
 void tree1()
 {
-    glColor3ub(154, 3, 30);
+    glColor3ub(120,70,20);
     glBegin(GL_POLYGON);
         glVertex2f(2,47);
         glVertex2f(2,51);
@@ -1275,7 +1297,7 @@ void tree1()
 //ID12
 void tree2()
 {
-    glColor3ub(154, 3, 30);
+    glColor3ub(120,70,20);
     glBegin(GL_POLYGON);
         glVertex2f(6,48);
         glVertex2f(6,56);
@@ -1300,7 +1322,7 @@ void tree2()
 //ID13
 void tree3()
 {
-    glColor3ub(154, 3, 30);
+    glColor3ub(120,70,20);
     glBegin(GL_POLYGON);
         glVertex2f(128,49);
         glVertex2f(128,53);
@@ -1325,7 +1347,7 @@ void tree3()
 //ID14
 void tree4()
 {
-    glColor3ub(154, 3, 30);
+    glColor3ub(120,70,20);
     glBegin(GL_POLYGON);
         glVertex2f(125,48);
         glVertex2f(125,52);
@@ -1350,7 +1372,7 @@ void tree4()
 //ID15
 void tree5()
 {
-    glColor3ub(154, 3, 30);
+    glColor3ub(120,70,20);
     glBegin(GL_POLYGON);
         glVertex2f(51,46.5);
         glVertex2f(51,51.5);
@@ -1367,19 +1389,128 @@ void tree5()
             glVertex2f(55,51.5);
 
         glColor3ub(193,209,31);
-            glVertex2f(51.5,58.5);
+            glVertex2f(51.5,59);
+    glEnd();
+
+}
+
+//ID16
+void tree6()
+{
+    glColor3ub(120,70,20);
+    glBegin(GL_POLYGON);
+        glVertex2f(102.5,46.5);
+        glVertex2f(102.5,51.5);
+        glVertex2f(103.5,51.5);
+        glVertex2f(103.5,46.5);
+    glEnd();
+
+
+    glBegin(GL_POLYGON);
+        glColor3ub(0,97,14);
+            glVertex2f(100,51.5);
+
+        glColor3ub(0,97,14);
+            glVertex2f(106,51.5);
+
+        glColor3ub(193,209,31);
+            glVertex2f(103,59);
+    glEnd();
+
+}
+
+//ID17
+void tree7()
+{
+    glColor3ub(120,70,20);
+    glBegin(GL_POLYGON);
+        glVertex2f(29.5,31);
+        glVertex2f(29.5,35.5);
+        glVertex2f(30.5,35.5);
+        glVertex2f(30.5,31);
+    glEnd();
+
+
+    glBegin(GL_POLYGON);
+        glColor3ub(0,97,14);
+            glVertex2f(26.5,35.5);
+
+        glColor3ub(0,97,14);
+            glVertex2f(33.5,35.5);
+
+        glColor3ub(193,209,31);
+            glVertex2f(30,41);
+    glEnd();
+
+}
+
+//ID18
+void tree8()
+{
+    glColor3ub(120,70,20);
+    glBegin(GL_POLYGON);
+        glVertex2f(89,31);
+        glVertex2f(89,35.5);
+        glVertex2f(90,35.5);
+        glVertex2f(90,31);
+    glEnd();
+
+
+    glBegin(GL_POLYGON);
+        glColor3ub(0,97,14);
+            glVertex2f(86,35.5);
+
+        glColor3ub(0,97,14);
+            glVertex2f(93,35.5);
+
+        glColor3ub(193,209,31);
+            glVertex2f(89.5,41);
     glEnd();
 
 }
 
 
+//ID19 (Cloud)
+void cloud1()
+{
+    if (showCloud)
+{
+
+    glPushMatrix();
+    glTranslatef(cloudMove1,0,0);
+
+        _circle(255,255,224, 2.25, 4, 91);
+        _circle(255,255,224, 2.89, 6.5, 91);
+        _circle(255,255,224, 2.25, 9, 91);
+
+    glPopMatrix();
+}
+}
+
+//ID20 (Cloud)
+void cloud2()
+{
+    if (showCloud)
+    {
+          glPushMatrix();
+    glTranslatef(cloudMove2,0,0);
+
+        _circle(255,255,224, 2.25, 42, 100);
+        _circle(255,255,224, 4, 45, 100);
+        _circle(255,255,224, 2.25, 48, 100);
+
+    glPopMatrix();
+    }
+
+}
+
 
 // AF1
 void updateShip(int value) {
     if(shipOn){
-        shipMove += .4f;
+        shipMove += .35f;
         if(shipMove > 130) {
-            shipMove = -120;
+            shipMove = -110;
         }
     }
 
@@ -1388,12 +1519,49 @@ void updateShip(int value) {
 }
 
 //AF2
+void updateCloud1(int value)
+{
+    if(cloudOn1)
+    {
+        cloudMove1 += .2f;
+        if(cloudMove1 > 130)
+        {
+            cloudMove1 = -20;
+        }
+    }
+    glutPostRedisplay();
+    glutTimerFunc(20,updateCloud1,0);
+}
+
+//AF3
+void updateCloud2(int value)
+{
+    if(cloudOn2)
+    {
+        cloudMove2 += .2f;
+        if(cloudMove2 > 130)
+        {
+            cloudMove2 = -40;
+        }
+    }
+    glutPostRedisplay();
+    glutTimerFunc(20,updateCloud2,0);
+}
+
+
+//AF4
 void handleKeyPress(unsigned char key, int x, int y){
 
     switch (key){
         case('s'):
         case('S'):
             shipOn = !shipOn;
+            break;
+
+        case('c'):
+        case('C'):
+            cloudOn1 = !cloudOn1;
+            cloudOn2 = !cloudOn2;
             break;
 
         case('q'):
@@ -1404,12 +1572,18 @@ void handleKeyPress(unsigned char key, int x, int y){
     glutPostRedisplay();
 }
 
-//AF3
+//AF5
 void handleMouse(int button, int state, int x, int y){
 
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
         allOn = !allOn;
         shipOn = allOn;
+        cloudOn1 = allOn;
+        cloudOn2 = allOn;
+    }
+
+    if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN){
+        showCloud = !showCloud;
     }
     glutPostRedisplay();
 }
@@ -1418,28 +1592,36 @@ void handleMouse(int button, int state, int x, int y){
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
+    sky();
     river();
     ship();
-    road();
     walkway();
-    sky();
+    road();
+
+    cloud1();
+    cloud2();
+
     building1();
     building2();
     building3();
     building4();
     building5();
+
     tree1();
     tree2();
     tree3();
     tree4();
     tree5();
+    tree6();
+    tree7();
+    tree8();
     glFlush();
 }
 
 
 int main(int argc, char** argv) {
-    glutInitWindowSize(1220, 720);
     glutInit(&argc, argv);
+    glutInitWindowSize(1220, 720);
 
     glutInitWindowPosition(
 
@@ -1454,6 +1636,8 @@ int main(int argc, char** argv) {
 
     glutDisplayFunc(display);
     glutTimerFunc(20, updateShip, 0);
+    glutTimerFunc(20, updateCloud1, 0);
+    glutTimerFunc(20, updateCloud2, 0);
     glutKeyboardFunc(handleKeyPress);
     glutMouseFunc(handleMouse);
 
