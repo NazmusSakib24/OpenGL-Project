@@ -5,7 +5,10 @@
 
 float shipMove = 0.0f;
 bool shipOn = false;
-//bool carOn = false;
+float carMove = 0.0f;
+float wheelAngle = 0.0f;
+bool carOn = false;
+
 //bool rainOn = false;
 float cloudMove1 = 0.0f;
 float cloudMove2 = 0.0f;
@@ -1474,8 +1477,7 @@ void tree8()
 void cloud1()
 {
     if (showCloud)
-{
-
+    {
     glPushMatrix();
     glTranslatef(cloudMove1,0,0);
 
@@ -1484,7 +1486,7 @@ void cloud1()
         _circle(255,255,224, 2.25, 9, 91);
 
     glPopMatrix();
-}
+    }
 }
 
 //ID20 (Cloud)
@@ -1504,13 +1506,99 @@ void cloud2()
 
 }
 
+//ID21 (spoke)
+void spoke(float xc, float yc)
+{
+    float r = .64;
 
+    glColor3ub(0,0,0);
+
+    glLineWidth(1);
+    glBegin(GL_LINES);
+
+        glVertex2f(xc,yc);
+        glVertex2f(xc,yc+r);
+
+        glVertex2f(xc,yc);
+        glVertex2f(xc+r,yc);
+
+        glVertex2f(xc,yc);
+        glVertex2f(xc,yc-r);
+
+        glVertex2f(xc,yc);
+        glVertex2f(xc-r,yc);
+
+    glEnd();
+}
+
+//ID22 (wheel)
+void wheel(float xc, float yc)
+{
+    glPushMatrix();
+    glTranslatef(xc, yc, 0);
+    glRotatef(wheelAngle, 0, 0, 1);
+    glTranslatef(-xc, -yc, 0);
+
+
+    _circle( 0, 0, 0, 1.21, xc, yc);
+    _circle( 255, 255, 255, .64, xc, yc);
+
+    spoke(xc, yc);
+
+    glPopMatrix();
+}
+
+//ID23 (car body)
+void car()
+{
+    glPushMatrix();
+    glTranslatef(carMove, 0, 0);
+
+    glColor3ub(226, 109, 90);
+    glBegin(GL_POLYGON);
+        glVertex2f(2,42);
+        glVertex2f(2,44);
+        glVertex2f(3,45);
+        glVertex2f(11.6,45);
+        glVertex2f(13,44.3);
+        glVertex2f(13,42);
+    glEnd();
+
+    glColor3ub(226, 109, 90);
+    glBegin(GL_POLYGON);
+        glVertex2f(4,45);
+        glVertex2f(5.4,46.6);
+        glVertex2f(9,46.6);
+        glVertex2f(10.8,45);
+    glEnd();
+
+    glColor3ub(102, 255, 255);
+    glBegin(GL_POLYGON);
+        glVertex2f(4.4,45);
+        glVertex2f(5.45,46.4);
+        glVertex2f(7,46.4);
+        glVertex2f(7,45);
+    glEnd();
+
+    glColor3ub(102, 255, 255);
+    glBegin(GL_POLYGON);
+        glVertex2f(7.5,45);
+        glVertex2f(7.5,46.4);
+        glVertex2f(8.8,46.4);
+        glVertex2f(10.4,45);
+    glEnd();
+
+    wheel(4.6, 42);
+    wheel(10.2, 42);
+
+    glPopMatrix();
+}
 // AF1
 void updateShip(int value) {
     if(shipOn){
         shipMove += .35f;
         if(shipMove > 130) {
-            shipMove = -110;
+            shipMove = -120;
         }
     }
 
@@ -1548,8 +1636,32 @@ void updateCloud2(int value)
     glutTimerFunc(20,updateCloud2,0);
 }
 
-
 //AF4
+void updateCar(int value)
+{
+    if(carOn)
+    {
+        carMove += 0.35f;
+        if (carMove> 130)
+        {
+            carMove = -20;
+        }
+    }
+    glutPostRedisplay();
+    glutTimerFunc(20, updateCar, 0);
+}
+
+//AF5
+void updateWheel(int value)
+{
+    if(carOn)
+    {
+        wheelAngle -= 5.0f;
+    }
+    glutPostRedisplay();
+    glutTimerFunc(20, updateWheel, 0);
+}
+//AF6
 void handleKeyPress(unsigned char key, int x, int y){
 
     switch (key){
@@ -1564,6 +1676,11 @@ void handleKeyPress(unsigned char key, int x, int y){
             cloudOn2 = !cloudOn2;
             break;
 
+        case('v'):
+        case('V'):
+            carOn = !carOn;
+            break;
+
         case('q'):
         case('Q'):
             exit(0);
@@ -1572,7 +1689,7 @@ void handleKeyPress(unsigned char key, int x, int y){
     glutPostRedisplay();
 }
 
-//AF5
+//AF7
 void handleMouse(int button, int state, int x, int y){
 
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
@@ -1580,6 +1697,7 @@ void handleMouse(int button, int state, int x, int y){
         shipOn = allOn;
         cloudOn1 = allOn;
         cloudOn2 = allOn;
+        carOn = allOn;
     }
 
     if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN){
@@ -1606,6 +1724,8 @@ void display() {
     building3();
     building4();
     building5();
+
+    car();
 
     tree1();
     tree2();
@@ -1638,6 +1758,8 @@ int main(int argc, char** argv) {
     glutTimerFunc(20, updateShip, 0);
     glutTimerFunc(20, updateCloud1, 0);
     glutTimerFunc(20, updateCloud2, 0);
+    glutTimerFunc(20, updateCar, 0);
+    glutTimerFunc(20, updateWheel, 0);
     glutKeyboardFunc(handleKeyPress);
     glutMouseFunc(handleMouse);
 
