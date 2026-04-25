@@ -8,6 +8,9 @@ bool shipOn = false;
 float carMove = 0.0f;
 float wheelAngle = 0.0f;
 bool carOn = false;
+float busMove = 0.0f;
+float busAngle = 0.0f;
+bool busOn = false;
 
 //bool rainOn = false;
 float cloudMove1 = 0.0f;
@@ -1593,10 +1596,85 @@ void car()
 
     glPopMatrix();
 }
+
+//ID24 (Bus wheel)
+void busWheel(float xc, float yc)
+{
+    glPushMatrix();
+    glTranslatef(xc, yc, 0);
+    glRotatef(busAngle, 0, 0, 1);
+    glTranslatef(-xc, -yc, 0);
+
+    _circle(0, 0, 0, 1.69, xc, yc);
+    _circle(255, 255, 255, 1, xc, yc);
+    _circle(153, 0, 0, 0.09, xc + 0.6, yc);
+
+    glPopMatrix();
+}
+
+//ID25 (bus)
+void bus()
+{
+    glPushMatrix();
+    glTranslatef(busMove, 0, 0);
+
+    glColor3ub(255, 193, 61);
+    glBegin(GL_POLYGON);
+        glVertex2f(109.4, 37);
+        glVertex2f(109, 37.4);
+        glVertex2f(109, 41.6);
+        glVertex2f(109.6, 42.2);
+        glVertex2f(121.4, 42.2);
+        glVertex2f(122, 41.5);
+        glVertex2f(122, 37.5);
+        glVertex2f(121.5, 37);
+    glEnd();
+
+    glColor3ub(51, 153, 255);
+    glBegin(GL_POLYGON);
+        glVertex2f(110, 39.5);
+        glVertex2f(110, 41);
+        glVertex2f(112, 41);
+        glVertex2f(112, 39.5);
+    glEnd();
+
+    glColor3ub(51, 153, 255);
+    glBegin(GL_POLYGON);
+        glVertex2f(113, 39.5);
+        glVertex2f(113, 41);
+        glVertex2f(115, 41);
+        glVertex2f(115, 39.5);
+    glEnd();
+
+    glColor3ub(51, 153, 255);
+    glBegin(GL_POLYGON);
+        glVertex2f(116, 39.5);
+        glVertex2f(116, 41);
+        glVertex2f(118, 41);
+        glVertex2f(118, 39.5);
+    glEnd();
+
+    glColor3ub(51, 153, 255);
+    glBegin(GL_POLYGON);
+        glVertex2f(119, 39.5);
+        glVertex2f(119, 41);
+        glVertex2f(121, 41);
+        glVertex2f(121, 39.5);
+    glEnd();
+
+    busWheel(111.5, 37);
+    busWheel(111.5, 37);
+
+    busWheel(119.8, 37);
+    busWheel(119.8, 37);
+
+    glPopMatrix();
+}
+
 // AF1
 void updateShip(int value) {
     if(shipOn){
-        shipMove += .35f;
+        shipMove += .20f;
         if(shipMove > 130) {
             shipMove = -120;
         }
@@ -1652,16 +1730,43 @@ void updateCar(int value)
 }
 
 //AF5
-void updateWheel(int value)
+void rotateWheel(int value)
 {
     if(carOn)
     {
         wheelAngle -= 5.0f;
     }
     glutPostRedisplay();
-    glutTimerFunc(20, updateWheel, 0);
+    glutTimerFunc(20, rotateWheel, 0);
 }
-//AF6
+
+//AF6 (bus)
+void updateBus(int value)
+{
+    if (busOn)
+    {
+        busMove -= 0.2f;
+
+        if (busMove < -130)
+            busMove = 100;
+    }
+
+    glutPostRedisplay();
+    glutTimerFunc(20, updateBus, 0);
+}
+
+//AF7 (bus wheel)
+void rotateBusWheel(int value)
+{
+    if (busOn)
+    {
+        busAngle += 5.0f;
+    }
+    glutPostRedisplay();
+    glutTimerFunc(20, rotateBusWheel, 0);
+}
+
+//AF8
 void handleKeyPress(unsigned char key, int x, int y){
 
     switch (key){
@@ -1681,6 +1786,11 @@ void handleKeyPress(unsigned char key, int x, int y){
             carOn = !carOn;
             break;
 
+        case('b'):
+        case('B'):
+            busOn = !busOn;
+            break;
+
         case('q'):
         case('Q'):
             exit(0);
@@ -1689,7 +1799,7 @@ void handleKeyPress(unsigned char key, int x, int y){
     glutPostRedisplay();
 }
 
-//AF7
+//AF9
 void handleMouse(int button, int state, int x, int y){
 
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
@@ -1698,6 +1808,7 @@ void handleMouse(int button, int state, int x, int y){
         cloudOn1 = allOn;
         cloudOn2 = allOn;
         carOn = allOn;
+        busOn = allOn;
     }
 
     if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN){
@@ -1726,6 +1837,7 @@ void display() {
     building5();
 
     car();
+    bus();
 
     tree1();
     tree2();
@@ -1759,7 +1871,9 @@ int main(int argc, char** argv) {
     glutTimerFunc(20, updateCloud1, 0);
     glutTimerFunc(20, updateCloud2, 0);
     glutTimerFunc(20, updateCar, 0);
-    glutTimerFunc(20, updateWheel, 0);
+    glutTimerFunc(20, rotateWheel, 0);
+    glutTimerFunc(20, updateBus, 0);
+    glutTimerFunc(20, rotateBusWheel, 0);
     glutKeyboardFunc(handleKeyPress);
     glutMouseFunc(handleMouse);
 
