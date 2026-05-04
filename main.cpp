@@ -2,7 +2,7 @@
 #include <GL/glut.h>
 #include <math.h>
 
-
+bool nightMode = false;
 float shipMove = 0.0f;
 bool shipOn = false;
 float carMove = 0.0f;
@@ -11,8 +11,6 @@ bool carOn = false;
 float busMove = 0.0f;
 float busAngle = 0.0f;
 bool busOn = false;
-
-//bool rainOn = false;
 float cloudMove1 = 0.0f;
 float cloudMove2 = 0.0f;
 bool cloudOn1 = false;
@@ -41,6 +39,22 @@ void _circle(float r, float g, float b, float radius, float xc, float yc)
 void river() {
     glBegin(GL_POLYGON);
 
+      if (nightMode)
+      {
+        glColor3ub(10, 30, 80);
+        glVertex2f(0, 30);
+
+        glColor3ub(10, 30, 80);
+        glVertex2f(130, 30);
+
+        glColor3ub(0, 10, 40);
+        glVertex2f(130, 0);
+
+        glColor3ub(0, 10, 40);
+        glVertex2f(0, 0);
+      }
+
+      else{
         glColor3ub(0, 150, 255);
         glVertex2f(0, 30);
 
@@ -52,6 +66,7 @@ void river() {
 
         glColor3ub(0, 50, 150);
         glVertex2f(0, 0);
+      }
 
     glEnd();
 }
@@ -135,6 +150,22 @@ void walkway(){
 void sky() {
     glBegin(GL_POLYGON);
 
+     if(nightMode){
+        glColor3ub(10, 10, 40);
+        glVertex2f(0, 120);
+
+        glColor3ub(10, 10, 40);
+        glVertex2f(130, 120);
+
+        glColor3ub(84, 107, 171);
+        glVertex2f(130, 50);
+
+        glColor3ub(84, 107, 171);
+        glVertex2f(0, 50);
+
+    }
+
+    else{
         glColor3ub(135, 206, 235);
         glVertex2f(0, 120);
 
@@ -146,8 +177,12 @@ void sky() {
 
         glColor3ub(255, 220, 120);
         glVertex2f(0, 50);
-
+    }
     glEnd();
+    if(nightMode)
+    {
+         _circle(220, 230, 255, 4, 90, 110);
+    }
 }
 
 //ID5
@@ -1484,9 +1519,20 @@ void cloud1()
     glPushMatrix();
     glTranslatef(cloudMove1,0,0);
 
+        if(nightMode)
+        {
+        _circle(255,204,255, 2.25, 4, 91);
+        _circle(255,204,255, 2.89, 6.5, 91);
+        _circle(255,204,255, 2.25, 9, 91);
+
+        }
+
+        else
+        {
         _circle(255,255,224, 2.25, 4, 91);
         _circle(255,255,224, 2.89, 6.5, 91);
         _circle(255,255,224, 2.25, 9, 91);
+        }
 
     glPopMatrix();
     }
@@ -1497,12 +1543,22 @@ void cloud2()
 {
     if (showCloud)
     {
-          glPushMatrix();
+    glPushMatrix();
     glTranslatef(cloudMove2,0,0);
 
+        if(nightMode)
+        {
+        _circle(255,204,255, 2.25, 42, 100);
+        _circle(255,204,255, 4, 45, 100);
+        _circle(255,204,255, 2.25, 48, 100);
+        }
+
+        else
+        {
         _circle(255,255,224, 2.25, 42, 100);
         _circle(255,255,224, 4, 45, 100);
         _circle(255,255,224, 2.25, 48, 100);
+        }
 
     glPopMatrix();
     }
@@ -1663,12 +1719,226 @@ void bus()
     glEnd();
 
     busWheel(111.5, 37);
-    busWheel(111.5, 37);
+    //busWheel(111.5, 37);
 
     busWheel(119.8, 37);
-    busWheel(119.8, 37);
+    //busWheel(119.8, 37);
 
     glPopMatrix();
+}
+
+//ID26 (jetty)
+void jetty()
+{
+    glColor3ub(160,160,160);
+    glBegin(GL_POLYGON);
+        glVertex2f(60,25);
+        glVertex2f(63,31.5);
+        glVertex2f(67,31.5);
+        glVertex2f(70,25);
+    glEnd();
+
+    glColor3ub(102,51,0);
+    glBegin(GL_POLYGON);
+        glVertex2f(60,23.6);
+        glVertex2f(60,25);
+        glVertex2f(60.7,25);
+        glVertex2f(60.7,23.6);
+    glEnd();
+
+    glColor3ub(102,51,0);
+    glBegin(GL_POLYGON);
+        glVertex2f(69.3,23.6);
+        glVertex2f(69.3,25);
+        glVertex2f(70,25);
+        glVertex2f(70,23.6);
+    glEnd();
+
+    glColor3ub(0,0,0);
+    glLineWidth(1);
+    glBegin(GL_LINES);
+        glVertex2f(60,25);
+        glVertex2f(63,31.5);
+        glVertex2f(63,31.5);
+        glVertex2f(67,31.5);
+        glVertex2f(67,31.5);
+        glVertex2f(70,25);
+        glVertex2f(70,25);
+        glVertex2f(60,25);
+    glEnd();
+}
+
+//ID27
+void lamp1()
+{
+    glColor3ub(102,51,0);
+    glBegin(GL_POLYGON);
+        glVertex2f(7.1,33.7);
+        glVertex2f(7.1,38.5);
+        glVertex2f(7.8,38.5);
+        glVertex2f(7.8,33.7);
+    glEnd();
+
+    if(nightMode){
+    _circle(255, 255, 150, 1.2, 7.5, 39.5);
+    }
+
+    else{
+    _circle(192,192,192, 1.1, 7.5, 39.5);
+    }
+}
+
+//ID28
+void lamp2()
+{
+    glColor3ub(102,51,0);
+    glBegin(GL_POLYGON);
+        glVertex2f(16.1+10,46);
+        glVertex2f(16.1+10,51);
+        glVertex2f(16.8+10,51);
+        glVertex2f(16.8+10,46);
+    glEnd();
+
+    if(nightMode)
+    {
+        _circle(255,255,150, 1.1025, 26.5, 52.05);
+    }
+    else{
+        _circle(192,192,192, 1.1025, 26.5, 52.05);
+    }
+
+}
+
+//ID29
+void lamp3()
+{
+    glColor3ub(102,51,0);
+    glBegin(GL_POLYGON);
+        glVertex2f(16.1+50,46);
+        glVertex2f(16.1+50,51);
+        glVertex2f(16.8+50,51);
+        glVertex2f(16.8+50,46);
+    glEnd();
+
+    if(nightMode)
+    {
+        _circle(255,255,150, 1.1025, 66.5, 52.05);
+    }
+
+    else
+    {
+        _circle(192,192,192, 1.1025, 66.5, 52.05);
+    }
+}
+
+//ID30
+void lamp4()
+{
+    glColor3ub(102,51,0);
+    glBegin(GL_POLYGON);
+        glVertex2f(16.1+100,46);
+        glVertex2f(16.1+100,51);
+        glVertex2f(16.8+100,51);
+        glVertex2f(16.8+100,46);
+    glEnd();
+    if(nightMode)
+    {
+        _circle(255,255,150, 1.1025, 116.5, 52.05);
+    }
+
+    else{
+        _circle(192,192,192, 1.1025, 116.5, 52.05);
+    }
+}
+
+//ID31
+void lamp5()
+{
+    glColor3ub(102,51,0);
+    glBegin(GL_POLYGON);
+        glVertex2f(57.1,33.7);
+        glVertex2f(57.1,38.5);
+        glVertex2f(57.8,38.5);
+        glVertex2f(57.8,33.7);
+    glEnd();
+
+    if(nightMode)
+    {
+        _circle(255,255,150, 1.1025, 57.5, 39.5);
+    }
+
+    else
+    {
+        _circle(192,192,192, 1.1025, 57.5, 39.5);
+    }
+}
+
+//ID32
+void lamp6()
+{
+    glColor3ub(102,51,0);
+    glBegin(GL_POLYGON);
+        glVertex2f(107.1,33.7);
+        glVertex2f(107.1,38.5);
+        glVertex2f(107.8,38.5);
+        glVertex2f(107.8,33.7);
+    glEnd();
+
+    if(nightMode)
+    {
+        _circle(255,255,150, 1.1025, 107.5, 39.5);
+    }
+
+    else{
+        _circle(192,192,192, 1.1025, 107.5, 39.5);
+    }
+}
+
+//ID33 (stars)
+void stars()
+{
+    if (nightMode)
+    {
+        glColor3ub(255,255,255);
+        glPointSize(3);
+        glBegin(GL_POINTS);
+            glVertex2f(2,110);
+            glVertex2f(8,116);
+            glVertex2f(14,104);
+            glVertex2f(20,110);
+            glVertex2f(18,118);
+            glVertex2f(30,120);
+            glVertex2f(30,106);
+            glVertex2f(35,100);
+            glVertex2f(45,105);
+            glVertex2f(45,115);
+            glVertex2f(46,94);
+            glVertex2f(50,110);
+            glVertex2f(55,120);
+            glVertex2f(60,105);
+            glVertex2f(65,115);
+            glVertex2f(75,115);
+            glVertex2f(70,105);
+            glVertex2f(75,95);
+            glVertex2f(85,115);
+            glVertex2f(85,110);
+            glVertex2f(85,100);
+            glVertex2f(90,105);
+            glVertex2f(95,115);
+            glVertex2f(100,100);
+            glVertex2f(102,110);
+            glVertex2f(105,115);
+            glVertex2f(105,120);
+            glVertex2f(110,100);
+            glVertex2f(120,120);
+            glVertex2f(115,115);
+            glVertex2f(155,110);
+            glVertex2f(120,105);
+        glEnd();
+    }
+    else{
+        return;
+    }
 }
 
 // AF1
@@ -1689,7 +1959,7 @@ void updateCloud1(int value)
 {
     if(cloudOn1)
     {
-        cloudMove1 += .2f;
+        cloudMove1 += .1f;
         if(cloudMove1 > 130)
         {
             cloudMove1 = -20;
@@ -1704,7 +1974,7 @@ void updateCloud2(int value)
 {
     if(cloudOn2)
     {
-        cloudMove2 += .2f;
+        cloudMove2 += .1f;
         if(cloudMove2 > 130)
         {
             cloudMove2 = -40;
@@ -1766,7 +2036,7 @@ void rotateBusWheel(int value)
     glutTimerFunc(20, rotateBusWheel, 0);
 }
 
-//AF8
+//AF8 (key)
 void handleKeyPress(unsigned char key, int x, int y){
 
     switch (key){
@@ -1791,6 +2061,11 @@ void handleKeyPress(unsigned char key, int x, int y){
             busOn = !busOn;
             break;
 
+        case('n'):
+        case('N'):
+            nightMode = !nightMode;
+            break;
+
         case('q'):
         case('Q'):
             exit(0);
@@ -1799,7 +2074,7 @@ void handleKeyPress(unsigned char key, int x, int y){
     glutPostRedisplay();
 }
 
-//AF9
+//AF9 (mouse)
 void handleMouse(int button, int state, int x, int y){
 
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
@@ -1819,14 +2094,15 @@ void handleMouse(int button, int state, int x, int y){
 
 
 void display() {
+
     glClear(GL_COLOR_BUFFER_BIT);
 
     sky();
+    stars();
     river();
     ship();
     walkway();
     road();
-
     cloud1();
     cloud2();
 
@@ -1847,6 +2123,13 @@ void display() {
     tree6();
     tree7();
     tree8();
+    jetty();
+    lamp1();
+    lamp2();
+    lamp3();
+    lamp4();
+    lamp5();
+    lamp6();
     glFlush();
 }
 
@@ -1863,7 +2146,7 @@ int main(int argc, char** argv) {
     );
 
     glutCreateWindow("City Scene");
-    gluOrtho2D(0, 130, 0, 105);
+    gluOrtho2D(0, 130, 0, 120);
     glShadeModel(GL_SMOOTH);
 
     glutDisplayFunc(display);
