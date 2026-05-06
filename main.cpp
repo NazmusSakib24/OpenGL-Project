@@ -37,6 +37,7 @@ void _circle(float r, float g, float b, float radius, float xc, float yc)
 
 // ID1 (River)
 void river() {
+
     glBegin(GL_POLYGON);
 
       if (nightMode)
@@ -67,6 +68,47 @@ void river() {
         glColor3ub(0, 50, 150);
         glVertex2f(0, 0);
       }
+
+    glEnd();
+
+
+    if(nightMode){
+        glColor3ub(120,150,200);
+    }
+    else{
+        glColor3ub(180,220,255);
+    }
+
+    glLineWidth(1);
+
+    glBegin(GL_LINES);
+
+        glVertex2f(8,22);
+        glVertex2f(13,22);
+
+        glVertex2f(18,15);
+        glVertex2f(23,15);
+
+        glVertex2f(5,8);
+        glVertex2f(10,8);
+
+        glVertex2f(40,26);
+        glVertex2f(46,27);
+
+        glVertex2f(52,18);
+        glVertex2f(58,18);
+
+        glVertex2f(65,10);
+        glVertex2f(71,11);
+
+        glVertex2f(90,24);
+        glVertex2f(96,24);
+
+        glVertex2f(102,16);
+        glVertex2f(108,17);
+
+        glVertex2f(115,7);
+        glVertex2f(121,7);
 
     glEnd();
 }
@@ -2518,6 +2560,20 @@ void car()
     wheel(4.6, 42);
     wheel(10.2, 42);
 
+     if(nightMode)
+    {
+        glColor4ub(255,255,210,120);
+
+        glBegin(GL_POLYGON);
+
+            glVertex2f(13,44);
+            glVertex2f(20,45);
+            glVertex2f(20,41);
+
+        glEnd();
+    }
+
+
     glPopMatrix();
 }
 
@@ -2587,10 +2643,20 @@ void bus()
     glEnd();
 
     busWheel(111.5, 37);
-    //busWheel(111.5, 37);
-
     busWheel(119.8, 37);
-    //busWheel(119.8, 37);
+
+    if(nightMode)
+    {
+    glColor4ub(255,255,210,120);
+
+    glBegin(GL_POLYGON);
+
+        glVertex2f(109,38);
+        glVertex2f(103,41);
+        glVertex2f(103,35);
+
+    glEnd();
+    }
 
     glPopMatrix();
 }
@@ -2648,6 +2714,7 @@ void lamp1()
     glEnd();
 
     if(nightMode){
+    //_circle(255,255,255, 1.4, 7.5, 39.5);
     _circle(255, 255, 150, 1.2, 7.5, 39.5);
     }
 
@@ -3013,9 +3080,11 @@ int main(int argc, char** argv) {
 
     );
 
-    glutCreateWindow("City Scene");
+    glutCreateWindow("Riverside City Animation");
     gluOrtho2D(0, 130, 0, 120);
     glShadeModel(GL_SMOOTH);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glutDisplayFunc(display);
     glutTimerFunc(20, updateShip, 0);
